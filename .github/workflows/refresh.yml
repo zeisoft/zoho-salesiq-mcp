@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   refresh:
@@ -25,14 +26,25 @@ jobs:
       - name: Render from the live catalogue
         run: python3 tools/render.py zoho-salesiq --inplace
 
-      - name: Commit only if something changed
+      - name: Open and merge a pull request, but only if something changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config user.name "heymetra-docs"
-          git config user.email "hello@heymetra.com"
-          git add -A
-          if git diff --staged --quiet; then
-            echo "The catalogue says the same thing it said yesterday. Nothing to commit."
+          if git diff --quiet; then
+            echo "The catalogue says the same thing it said yesterday. Nothing to do."
             exit 0
           fi
-          git commit -m "docs: refresh zoho-salesiq from the connector catalogue"
-          git push
+
+          # A pull request rather than a push to main. The organisation requires one,
+          # and this token is not on the bypass list — measured, not assumed: a direct
+          # push answered GH013 and the job failed with the README already regenerated.
+          # Going through a pull request satisfies the rule instead of widening it for
+          # the other sixty repositories that rely on it.
+          git config user.name "heymetra-docs"
+          git config user.email "hello@heymetra.com"
+          BRANCH="refresh/$(date -u +%Y%m%d-%H%M%S)"
+          git switch -qc "$BRANCH"
+          git commit -qam "docs: refresh zoho-salesiq from the connector catalogue"
+          git push -q origin "$BRANCH"
+          gh pr create --base main --head "$BRANCH"             --title "docs: refresh zoho-salesiq from the connector catalogue"             --body "The connector catalogue changed. This is the README regenerated from it."
+          gh pr merge "$BRANCH" --squash --delete-branch
