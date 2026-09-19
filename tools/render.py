@@ -216,118 +216,146 @@ def problems_section(c: dict) -> str:
     return "\n".join(out)
 
 
+HOOKS = {
+    "Mobile": "Your subscription revenue lives in {name}. What you paid to get those "
+              "subscribers does not. Ask about both in the same sentence.",
+    "Ecommerce": "Your orders live in {name}. What you spent to win them lives in your ad "
+                 "accounts. One question, both answers.",
+    "Analytics": "{name} knows what people did. It does not know what it cost, or what it "
+                 "earned. Connect it beside the accounts that do.",
+    "Revenue & CRM": "Your pipeline lives in {name}. What it cost to fill it lives somewhere "
+                     "else entirely. Ask once, across both.",
+    "Ads": "{name} tells you what you spent. It cannot tell you what came back. Put it beside "
+           "the accounts that hold the revenue.",
+    "Channels": "An answer nobody reads is not an answer. Have it delivered to {name}, where "
+                "the team already is.",
+}
+
+
+def hook(c: dict) -> str:
+    """The opening line.
+
+    A connector page that opens by defining the provider is writing for someone who
+    has not heard of a product they already pay for. The definition still earns its
+    place further down, where it reads as reference rather than as a greeting.
+    """
+    template = HOOKS.get(c["category"], "Connect {name} once, then ask about it in plain language.")
+    return template.format(name=c["name"])
+
+
 def render(c: dict, clients: list[dict], siblings: list[dict]) -> str:
     name = c["name"]
     slug = c["slug"]
-    parts: list[str] = []
+    p: list[str] = []
 
-    parts.append(f"# {name} MCP server — through HeyMetra")
-    parts.append("")
-    parts.append(
-        f"> **Unofficial.** This is not {name}'s own MCP server and this repository is not "
-        f"affiliated with, endorsed by or supported by {name}. It documents how "
-        f"[HeyMetra]({SITE}/), a remote MCP server built by Zeisoft, reads {name}."
-    )
-    parts.append("")
+    p.append('<div align="center">')
+    p.append("")
+    p.append(f'<img src="assets/cover.png" alt="{name} through HeyMetra\'s MCP server" width="100%">')
+    p.append("")
+    p.append(f"# {name} &times; HeyMetra")
+    p.append("")
     if c.get("tagline"):
-        parts.append(f"**{c['tagline'].rstrip('.')}.**")
-        parts.append("")
-    parts.append(
+        p.append(f"**{c['tagline'].strip().rstrip('.')}.**")
+        p.append("")
+    p.append(hook(c))
+    p.append("")
+    p.append(
         f"[![MCP Registry](https://img.shields.io/badge/MCP_Registry-com.heymetra%2Fheymetra-1f6feb)]({REGISTRY})\n"
         f"[![Transport](https://img.shields.io/badge/transport-Streamable_HTTP-444)](https://modelcontextprotocol.io/)\n"
         f"[![Auth](https://img.shields.io/badge/auth-OAuth_2.1-444)]({SITE}/security/)\n"
         f"[![Connector page](https://img.shields.io/badge/heymetra.com-{slug}-1f6feb)]({SITE}/connectors/{slug}/)"
     )
-    parts.append("")
-    parts.append("---")
-    parts.append("")
-
-    if c.get("what"):
-        parts.append(f"## What {name} is")
-        parts.append("")
-        parts.append(c["what"].strip())
-        parts.append("")
-
-    if c.get("how"):
-        parts.append(f"## What HeyMetra reads from {name}")
-        parts.append("")
-        parts.append(c["how"].strip())
-        parts.append("")
+    p.append("")
+    p.append("```")
+    p.append(ENDPOINT)
+    p.append("```")
+    p.append("")
+    p.append("</div>")
+    p.append("")
+    p.append("---")
+    p.append("")
 
     if c.get("can_ask"):
-        parts.append("## What you can ask")
-        parts.append("")
-        parts.append("Once connected, in your own assistant, in plain language:")
-        parts.append("")
+        p.append("## Ask it things like")
+        p.append("")
         for q in c["can_ask"]:
-            parts.append(f"> {q}")
-            parts.append("")
+            p.append(f"> {q}")
+            p.append("")
+        p.append(
+            "No dashboard, no export, no query language. You ask in the assistant you already "
+            "use and the answer comes back with the account it came from."
+        )
+        p.append("")
+
+    p.append(f"## Connect {name}")
+    p.append("")
+    p.append(setup_section(c))
+    p.append("")
+
+    p.append("## Then add HeyMetra to your assistant")
+    p.append("")
+    p.append(client_block(clients))
 
     table = permissions_table(c)
-    if table:
-        parts.append("## Permissions")
-        parts.append("")
-        parts.append(
-            "You switch these on per connection, and a permission you leave off is a tool "
-            "your assistant never sees."
-        )
-        parts.append("")
-        parts.append(table)
-        parts.append("")
-
     actions = c.get("actions") or []
-    if actions:
-        parts.append("## What it can change")
-        parts.append("")
+    if table or actions:
+        p.append("## What it may and may not touch")
+        p.append("")
         for a in actions:
-            parts.append(f"- {a}")
-        parts.append("")
-        # The write bounds only belong on a connector that can write. Printed under a
-        # read-only source they describe budgets and campaigns it does not have, which
-        # reads as boilerplate and teaches the reader to skip the section that matters
-        # on the connectors where it is real.
+            p.append(f"{a}")
+            p.append("")
+        if table:
+            p.append(
+                "Permissions are switched on per connection, and one you leave off is a tool "
+                "your assistant never sees."
+            )
+            p.append("")
+            p.append(table)
+            p.append("")
         if any(
             o.get("writes")
             for perm in (c.get("consent") or {}).get("permissions") or []
             for o in perm.get("operations") or []
         ):
-            # Name the bound that applies to THIS connector. A budget ceiling quoted
-            # under a chat channel is as much noise as it was under a read-only source.
             bound = (
                 "at most 20 messages a rolling day, counted separately from account changes"
                 if c.get("kind") == "channel"
                 else "±50% on a budget, 5 campaigns per action and 20 changes a rolling day"
             )
-            parts.append(
-                "A tool that would change something returns the change for a person to approve "
-                "instead of running it, inside bounds that live in code rather than in a prompt: "
-                f"{bound}, and an approval that expires after 30 minutes. "
-                f"[How that works]({SITE}/security/)."
+            p.append(
+                "Anything that would change something comes back as a proposal you approve, "
+                f"inside bounds that live in code rather than in a prompt: {bound}, and an "
+                f"approval that expires after 30 minutes. [How that works]({SITE}/security/)."
             )
-            parts.append("")
-
-    parts.append(f"## Connect {name}")
-    parts.append("")
-    parts.append(setup_section(c))
-    parts.append("")
-
-    parts.append("## Then add HeyMetra to your assistant")
-    parts.append("")
-    parts.append(client_block(clients))
+            p.append("")
 
     probs = problems_section(c)
     if probs:
-        parts.append("## When something goes wrong")
-        parts.append("")
-        parts.append(probs)
+        p.append("## When something goes wrong")
+        p.append("")
+        p.append(probs)
 
-    parts.append("## Everything else HeyMetra reads")
-    parts.append("")
-    parts.append(
-        "One connection answers across accounts — which is the point, because spend lives in one "
-        "place and revenue in another:"
+    if c.get("how"):
+        p.append(f"## What HeyMetra reads from {name}")
+        p.append("")
+        p.append(c["how"].strip())
+        p.append("")
+
+    if c.get("what"):
+        p.append("<details>")
+        p.append(f"<summary>About {name}</summary>")
+        p.append("")
+        p.append(c["what"].strip())
+        p.append("</details>")
+        p.append("")
+
+    p.append("## One connection, not seven")
+    p.append("")
+    p.append(
+        "The reason to read {n} through HeyMetra rather than through a server that only knows "
+        "{n} is everything else it can answer in the same breath:".format(n=name)
     )
-    parts.append("")
+    p.append("")
     by_cat: dict[str, list[str]] = {}
     for s in siblings:
         if s["slug"] == slug:
@@ -335,36 +363,32 @@ def render(c: dict, clients: list[dict], siblings: list[dict]) -> str:
         elif published(s):
             link = f"[{s['name']}](https://github.com/zeisoft/{repo_name(s['slug'])})"
         else:
-            # No repository for it, so the link goes where the truth is kept.
             link = f"[{s['name']}]({SITE}/connectors/{s['slug']}/)"
         by_cat.setdefault(s["category"], []).append(link)
     for cat, items in by_cat.items():
-        parts.append(f"**{cat}** — " + " · ".join(items))
-        parts.append("")
-    parts.append(
-        f"The full catalogue, with what each one can do today, is at "
-        f"[{SITE.replace('https://','')}/connectors/]({SITE}/connectors/)."
-    )
-    parts.append("")
+        p.append(f"**{cat}** — " + " · ".join(items))
+        p.append("")
+    p.append(f"The full catalogue is at [{SITE.replace('https://','')}/connectors/]({SITE}/connectors/).")
+    p.append("")
 
-    parts.append("## Links")
-    parts.append("")
-    parts.append(f"- [{name} connector page]({SITE}/connectors/{slug}/) — the source this page is generated from")
-    parts.append(f"- [HeyMetra]({SITE}/) — what the product is")
-    parts.append(f"- [Setup per assistant]({SITE}/mcp/) — eight clients, step by step")
-    parts.append(f"- [Security and limits]({SITE}/security/)")
-    parts.append(f"- [Pricing]({SITE}/pricing/) — paid, no free plan and no trial")
-    parts.append("- [HeyMetra's own repository](https://github.com/zeisoft/heymetra-mcp)")
-    parts.append("")
-    parts.append("---")
-    parts.append("")
-    parts.append(
-        "<sub>This README is generated from HeyMetra's live connector catalogue and refreshed daily; "
-        "it is committed only when something in it actually changed. Corrections are welcome as issues. "
-        "Built by <a href=\"https://zeisoft.com\">Zeisoft</a>.</sub>"
+    p.append("## Links")
+    p.append("")
+    p.append(f"- [{name} connector page]({SITE}/connectors/{slug}/)")
+    p.append(f"- [HeyMetra]({SITE}/) — what the product is")
+    p.append(f"- [Setup for every assistant]({SITE}/mcp/)")
+    p.append(f"- [Security and limits]({SITE}/security/)")
+    p.append(f"- [Pricing]({SITE}/pricing/)")
+    p.append("- [HeyMetra's own repository](https://github.com/zeisoft/heymetra-mcp)")
+    p.append("")
+    p.append("---")
+    p.append("")
+    p.append(
+        f"<sub>Built by <a href=\"https://zeisoft.com\">Zeisoft</a>, who make HeyMetra. "
+        f"Not affiliated with {name}. This README is generated from HeyMetra's live connector "
+        f"catalogue and refreshed daily; corrections are welcome as issues.</sub>"
     )
-    parts.append("")
-    return "\n".join(parts)
+    p.append("")
+    return "\n".join(p)
 
 
 TOOL_NAME = re.compile(r"\b(get|list|create|update|pause|rename|approve|reject|undo|submit|send)_[a-z_]{3,}\b")

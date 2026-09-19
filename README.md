@@ -1,27 +1,27 @@
-# Zoho SalesIQ MCP server — through HeyMetra
+<div align="center">
 
-> **Unofficial.** This is not Zoho SalesIQ's own MCP server and this repository is not affiliated with, endorsed by or supported by Zoho SalesIQ. It documents how [HeyMetra](https://heymetra.com/), a remote MCP server built by Zeisoft, reads Zoho SalesIQ.
+<img src="assets/cover.png" alt="Zoho SalesIQ through HeyMetra's MCP server" width="100%">
+
+# Zoho SalesIQ &times; HeyMetra
 
 **Live chat volume, and how much of it went unanswered — not open yet.**
+
+Your pipeline lives in Zoho SalesIQ. What it cost to fill it lives somewhere else entirely. Ask once, across both.
 
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-com.heymetra%2Fheymetra-1f6feb)](https://registry.modelcontextprotocol.io/v0/servers/com.heymetra%2Fheymetra/versions)
 [![Transport](https://img.shields.io/badge/transport-Streamable_HTTP-444)](https://modelcontextprotocol.io/)
 [![Auth](https://img.shields.io/badge/auth-OAuth_2.1-444)](https://heymetra.com/security/)
 [![Connector page](https://img.shields.io/badge/heymetra.com-zoho-salesiq-1f6feb)](https://heymetra.com/connectors/zoho-salesiq/)
 
+```
+https://mcp.heymetra.com/mcp
+```
+
+</div>
+
 ---
 
-## What Zoho SalesIQ is
-
-Zoho SalesIQ is the live chat and visitor tracking on your website. It is where somebody who is not yet a lead asks their first question.
-
-## What HeyMetra reads from Zoho SalesIQ
-
-Not open yet: SalesIQ needs its own sign-in separate from Zoho CRM, and that connection has not been proven end to end. When it opens, your MCP client gets a tool that counts the chats started in a period and splits them by status — including the ones nobody picked up — by department, by the operator who took them, by brand, or by day. A missed chat is a lead that leaves no record in the CRM at all, which is the question this connector exists for. What a visitor typed, and their name, email and phone number, are never requested from Zoho and never returned. Connecting SalesIQ asks for nothing from your CRM, and connecting your CRM asks for nothing here. Read-only: no tool sends a chat message.
-
-## What you can ask
-
-Once connected, in your own assistant, in plain language:
+## Ask it things like
 
 > How many chats came in last week, and how many did nobody answer?
 
@@ -29,24 +29,7 @@ Once connected, in your own assistant, in plain language:
 
 > Which days of the week are busiest on live chat?
 
-## Permissions
-
-You switch these on per connection, and a permission you leave off is a tool your assistant never sees.
-
-| Permission | What it covers | Changes anything? |
-|---|---|---|
-| **Included with the connection** | What HeyMetra needs to set the connection up and nothing more. It cannot be switched off on its own — removing the connection is how you withdraw it. | No, read only |
-| **Chats** | Count conversations and split them by status, department, operator, brand or day. The messages themselves are never read. | No, read only |
-
-<details>
-<summary>What each permission lets an assistant do, in full</summary>
-
-- Counts the chats that came in over a period by status, department, operator, brand or day. What a visitor typed, and their details, are never requested.
-</details>
-
-## What it can change
-
-- Zoho SalesIQ is a read-only source — HeyMetra reads it to answer questions and never changes the account.
+No dashboard, no export, no query language. You ask in the assistant you already use and the answer comes back with the account it came from.
 
 ## Connect Zoho SalesIQ
 
@@ -161,9 +144,36 @@ _The key is serverUrl, not url — the one every other JSON client spells differ
 Full walkthrough: [heymetra.com/mcp/antigravity/](https://heymetra.com/mcp/antigravity/)
 </details>
 
-## Everything else HeyMetra reads
+## What it may and may not touch
 
-One connection answers across accounts — which is the point, because spend lives in one place and revenue in another:
+Zoho SalesIQ is a read-only source — HeyMetra reads it to answer questions and never changes the account.
+
+Permissions are switched on per connection, and one you leave off is a tool your assistant never sees.
+
+| Permission | What it covers | Changes anything? |
+|---|---|---|
+| **Included with the connection** | What HeyMetra needs to set the connection up and nothing more. It cannot be switched off on its own — removing the connection is how you withdraw it. | No, read only |
+| **Chats** | Count conversations and split them by status, department, operator, brand or day. The messages themselves are never read. | No, read only |
+
+<details>
+<summary>What each permission lets an assistant do, in full</summary>
+
+- Counts the chats that came in over a period by status, department, operator, brand or day. What a visitor typed, and their details, are never requested.
+</details>
+
+## What HeyMetra reads from Zoho SalesIQ
+
+Not open yet: SalesIQ needs its own sign-in separate from Zoho CRM, and that connection has not been proven end to end. When it opens, your MCP client gets a tool that counts the chats started in a period and splits them by status — including the ones nobody picked up — by department, by the operator who took them, by brand, or by day. A missed chat is a lead that leaves no record in the CRM at all, which is the question this connector exists for. What a visitor typed, and their name, email and phone number, are never requested from Zoho and never returned. Connecting SalesIQ asks for nothing from your CRM, and connecting your CRM asks for nothing here. Read-only: no tool sends a chat message.
+
+<details>
+<summary>About Zoho SalesIQ</summary>
+
+Zoho SalesIQ is the live chat and visitor tracking on your website. It is where somebody who is not yet a lead asks their first question.
+</details>
+
+## One connection, not seven
+
+The reason to read Zoho SalesIQ through HeyMetra rather than through a server that only knows Zoho SalesIQ is everything else it can answer in the same breath:
 
 **Ads** — [Google Ads](https://heymetra.com/connectors/google-ads/) · [Meta](https://heymetra.com/connectors/meta-ads/)
 
@@ -177,17 +187,17 @@ One connection answers across accounts — which is the point, because spend liv
 
 **Channels** — [Slack](https://github.com/zeisoft/slack-mcp) · [Telegram](https://github.com/zeisoft/telegram-mcp)
 
-The full catalogue, with what each one can do today, is at [heymetra.com/connectors/](https://heymetra.com/connectors/).
+The full catalogue is at [heymetra.com/connectors/](https://heymetra.com/connectors/).
 
 ## Links
 
-- [Zoho SalesIQ connector page](https://heymetra.com/connectors/zoho-salesiq/) — the source this page is generated from
+- [Zoho SalesIQ connector page](https://heymetra.com/connectors/zoho-salesiq/)
 - [HeyMetra](https://heymetra.com/) — what the product is
-- [Setup per assistant](https://heymetra.com/mcp/) — eight clients, step by step
+- [Setup for every assistant](https://heymetra.com/mcp/)
 - [Security and limits](https://heymetra.com/security/)
-- [Pricing](https://heymetra.com/pricing/) — paid, no free plan and no trial
+- [Pricing](https://heymetra.com/pricing/)
 - [HeyMetra's own repository](https://github.com/zeisoft/heymetra-mcp)
 
 ---
 
-<sub>This README is generated from HeyMetra's live connector catalogue and refreshed daily; it is committed only when something in it actually changed. Corrections are welcome as issues. Built by <a href="https://zeisoft.com">Zeisoft</a>.</sub>
+<sub>Built by <a href="https://zeisoft.com">Zeisoft</a>, who make HeyMetra. Not affiliated with Zoho SalesIQ. This README is generated from HeyMetra's live connector catalogue and refreshed daily; corrections are welcome as issues.</sub>
