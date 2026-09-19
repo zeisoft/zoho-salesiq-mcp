@@ -47,6 +47,16 @@ Add HeyMetra once and it is there in every conversation. The address is the same
 https://mcp.heymetra.com/mcp
 ```
 
+### One command
+
+```bash
+npx add-mcp https://mcp.heymetra.com/mcp
+```
+
+[`add-mcp`](https://www.npmjs.com/package/add-mcp) is a third-party installer that writes the configuration for Claude Code, Codex, Cursor, Antigravity, VS Code and seventeen other agents. It infers the name from the address, so the server lands as `heymetra`. Run against this endpoint before it was written here.
+
+### Or by hand
+
 <details>
 <summary><b>Claude</b> — Settings → Customize → Connectors → Add custom connector</summary>
 

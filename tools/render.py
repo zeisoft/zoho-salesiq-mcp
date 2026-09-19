@@ -78,6 +78,19 @@ def client_block(clients: list[dict]) -> str:
         ENDPOINT,
         "```",
         "",
+        "### One command",
+        "",
+        "```bash",
+        f"npx add-mcp {ENDPOINT}",
+        "```",
+        "",
+        "[`add-mcp`](https://www.npmjs.com/package/add-mcp) is a third-party installer that writes the "
+        "configuration for Claude Code, Codex, Cursor, Antigravity, VS Code and seventeen other agents. "
+        "It infers the name from the address, so the server lands as `heymetra`. Run against this "
+        "endpoint before it was written here.",
+        "",
+        "### Or by hand",
+        "",
     ]
     for c in clients:
         s = c.get("setup") or {}
