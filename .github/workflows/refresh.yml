@@ -15,7 +15,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
   refresh:
@@ -26,25 +25,21 @@ jobs:
       - name: Render from the live catalogue
         run: python3 tools/render.py zoho-salesiq --inplace
 
-      - name: Open and merge a pull request, but only if something changed
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit, but only if something changed
         run: |
           if git diff --quiet; then
             echo "The catalogue says the same thing it said yesterday. Nothing to do."
             exit 0
           fi
 
-          # A pull request rather than a push to main. The organisation requires one,
-          # and this token is not on the bypass list — measured, not assumed: a direct
-          # push answered GH013 and the job failed with the README already regenerated.
-          # Going through a pull request satisfies the rule instead of widening it for
-          # the other sixty repositories that rely on it.
+          # A direct push. Two routes were measured before this one: a push under the
+          # organisation's default rules answered GH013 ("changes must be made through
+          # a pull request"), and opening the pull request instead answered "GitHub
+          # Actions is not permitted to create or approve pull requests" — a policy the
+          # organisation does not let a repository override. These eleven generated
+          # documentation repositories are excluded from that ruleset instead, which
+          # leaves it in force for every repository a person actually writes to.
           git config user.name "heymetra-docs"
           git config user.email "hello@heymetra.com"
-          BRANCH="refresh/$(date -u +%Y%m%d-%H%M%S)"
-          git switch -qc "$BRANCH"
           git commit -qam "docs: refresh zoho-salesiq from the connector catalogue"
-          git push -q origin "$BRANCH"
-          gh pr create --base main --head "$BRANCH"             --title "docs: refresh zoho-salesiq from the connector catalogue"             --body "The connector catalogue changed. This is the README regenerated from it."
-          gh pr merge "$BRANCH" --squash --delete-branch
+          git push
