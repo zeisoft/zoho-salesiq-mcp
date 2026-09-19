@@ -1,0 +1,38 @@
+name: Refresh from the catalogue
+
+# The README here is generated from HeyMetra's live connector catalogue. This job
+# re-renders it and commits ONLY when something actually changed, so the date on
+# the last commit means what it says.
+#
+# Daily rather than hourly on purpose: the catalogue does not change more than
+# once a day, and a schedule that commits nothing 23 times a day is noise in
+# every sense that matters.
+
+on:
+  schedule:
+    - cron: "27 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Render from the live catalogue
+        run: python3 tools/render.py zoho-salesiq --inplace
+
+      - name: Commit only if something changed
+        run: |
+          git config user.name "heymetra-docs"
+          git config user.email "hello@heymetra.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "The catalogue says the same thing it said yesterday. Nothing to commit."
+            exit 0
+          fi
+          git commit -m "docs: refresh zoho-salesiq from the connector catalogue"
+          git push
