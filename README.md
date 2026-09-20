@@ -4,7 +4,7 @@
 
 # Zoho SalesIQ &times; HeyMetra
 
-**Live chat volume, and how much of it went unanswered — not open yet.**
+**Live chat volume, and how much of it went unanswered.**
 
 Your pipeline lives in Zoho SalesIQ. What it cost to fill it lives somewhere else entirely. Ask once, across both.
 
@@ -33,11 +33,29 @@ No dashboard, no export, no query language. You ask in the assistant you already
 
 ## Connect Zoho SalesIQ
 
-1. When SalesIQ opens, choose it on the Connections screen in HeyMetra — separately from Zoho CRM, even if you have already connected that.
-2. Sign in on Zoho's own screen with an account that can read SalesIQ. Your password stays with Zoho.
-3. Review what Zoho shows: permission to list your portals and to read conversations. Nothing about your CRM, and nothing that can send a message.
-4. Pick the portal to grant — one connection is one portal.
-5. Add HeyMetra to your MCP client — Claude, ChatGPT, Cursor or Codex — with the details HeyMetra gives you; the SalesIQ tool appears there.
+**1. Connect it separately from Zoho CRM**
+
+Choose Zoho SalesIQ on the Connections screen even if Zoho CRM is already connected. They are different products behind one sign-in, and a grant on one carries nothing to the other.
+
+**2. Sign in as somebody who can see the chats**
+
+On Zoho's own screen. SalesIQ scopes what an operator sees by department, so the account you use decides which conversations HeyMetra can count.
+
+> An operator attached to one department produces figures for that department, which reads as a quiet site rather than as a narrow view.
+
+**3. Grant the two read permissions**
+
+Portals and conversations, both READ. Nothing about your CRM, and nothing that can send a chat message or reply to one.
+
+**4. Pick the portal**
+
+SalesIQ calls a site a portal, and an account can hold several. One HeyMetra connection is one portal; connect again to add another.
+
+> The portal's screen name is part of every address HeyMetra calls, which is why it is chosen here rather than guessed later.
+
+**5. Add HeyMetra to the assistant you use**
+
+Claude, ChatGPT, Cursor or Codex. The chat tool appears there and answers from the live portal.
 
 ## Then add HeyMetra to your assistant
 
@@ -171,9 +189,29 @@ Permissions are switched on per connection, and one you leave off is a tool your
 - Counts the chats that came in over a period by status, department, operator, brand or day. What a visitor typed, and their details, are never requested.
 </details>
 
+## When something goes wrong
+
+<details>
+<summary>The chat figures are far lower than the SalesIQ dashboard shows.</summary>
+
+**Why:** The account that authorised it is attached to one department rather than all of them, so it can only see that department's conversations.
+
+**Fix:** Reconnect as an administrator, or as an operator attached to every department you want counted.
+
+</details>
+
+<details>
+<summary>Another site's chats are missing.</summary>
+
+**Why:** A connection carries one portal, and that site is a different portal.
+
+**Fix:** Connect SalesIQ again and pick the other portal. Each connection is asked about by name.
+
+</details>
+
 ## What HeyMetra reads from Zoho SalesIQ
 
-Not open yet: SalesIQ needs its own sign-in separate from Zoho CRM, and that connection has not been proven end to end. When it opens, your MCP client gets a tool that counts the chats started in a period and splits them by status — including the ones nobody picked up — by department, by the operator who took them, by brand, or by day. A missed chat is a lead that leaves no record in the CRM at all, which is the question this connector exists for. What a visitor typed, and their name, email and phone number, are never requested from Zoho and never returned. Connecting SalesIQ asks for nothing from your CRM, and connecting your CRM asks for nothing here. Read-only: no tool sends a chat message.
+SalesIQ needs its own sign-in, separate from Zoho CRM: connecting one asks for nothing from the other. Your MCP client gets a tool that counts the chats started in a period and splits them by status — including the ones nobody picked up — by department, by the operator who took them, by brand, or by day. A missed chat is a lead that leaves no record in the CRM at all, which is the question this connector exists for. What a visitor typed, and their name, email and phone number, are never requested from Zoho and never returned. Connecting SalesIQ asks for nothing from your CRM, and connecting your CRM asks for nothing here. Read-only: no tool sends a chat message.
 
 <details>
 <summary>About Zoho SalesIQ</summary>
