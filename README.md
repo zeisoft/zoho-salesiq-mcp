@@ -181,12 +181,12 @@ Permissions are switched on per connection, and one you leave off is a tool your
 | Permission | What it covers | Changes anything? |
 |---|---|---|
 | **Included with the connection** | What HeyMetra needs to set the connection up and nothing more. It cannot be switched off on its own — removing the connection is how you withdraw it. | No, read only |
-| **Chats** | Count conversations and split them by status, department, operator, brand or day. The messages themselves are never read. | No, read only |
+| **Direct API access** | Let your assistant use this account's own API for anything HeyMetra's other operations do not cover. It reads directly, and what comes back is the provider's own answer rather than a figure HeyMetra has checked. It can also propose changes — those are never applied until you approve them, and HeyMetra cannot undo one afterwards. | No, read only |
 
 <details>
 <summary>What each permission lets an assistant do, in full</summary>
 
-- Counts the chats that came in over a period by status, department, operator, brand or day. What a visitor typed, and their details, are never requested.
+- Ask this account's own API a question HeyMetra's other operations do not cover. Reads only, and the answer is the provider's own rather than a figure HeyMetra has checked.
 </details>
 
 ## When something goes wrong
