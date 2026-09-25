@@ -45,7 +45,7 @@ On Zoho's own screen. SalesIQ scopes what an operator sees by department, so the
 
 **3. Grant the two read permissions**
 
-Portals and conversations, both READ. Nothing about your CRM, and nothing that can send a chat message or reply to one.
+Portals and conversations, both READ, and nothing about your CRM. If you chose to allow changes, Zoho also lists conversations CREATE, which is what lets your assistant propose a reply to a visitor. A read-only connection cannot send a chat message or reply to one.
 
 **4. Pick the portal**
 
@@ -90,7 +90,7 @@ Full walkthrough: [heymetra.com/mcp/claude/](https://heymetra.com/mcp/claude/)
 
 Paste the address above into Settings → Security and login → Developer mode, then chatgpt.com/plugins.
 
-_The endpoint has to include its /mcp path here._
+_The address has to end in /mcp here._
 
 Full walkthrough: [heymetra.com/mcp/chatgpt/](https://heymetra.com/mcp/chatgpt/)
 </details>
@@ -151,7 +151,7 @@ Full walkthrough: [heymetra.com/mcp/codex/](https://heymetra.com/mcp/codex/)
 }
 ```
 
-_Leave the static OAuth fields empty — they exist for servers that cannot register themselves._
+_Leave the static OAuth fields empty; HeyMetra does not need them._
 
 Full walkthrough: [heymetra.com/mcp/cursor/](https://heymetra.com/mcp/cursor/)
 </details>
@@ -167,27 +167,27 @@ Full walkthrough: [heymetra.com/mcp/cursor/](https://heymetra.com/mcp/cursor/)
 }
 ```
 
-_The key is serverUrl, not url — the one every other JSON client spells differently._
+_The key is serverUrl, not url, unlike every other JSON client._
 
 Full walkthrough: [heymetra.com/mcp/antigravity/](https://heymetra.com/mcp/antigravity/)
 </details>
 
 ## What it may and may not touch
 
-Propose a change through this account's own API, for operations HeyMetra does not cover. Nothing is sent until you approve it, and HeyMetra cannot undo it afterwards.
+Propose a change to this account. Nothing is sent until you approve it, and HeyMetra cannot undo it afterwards.
 
 Permissions are switched on per connection, and one you leave off is a tool your assistant never sees.
 
 | Permission | What it covers | Changes anything? |
 |---|---|---|
-| **Included with the connection** | What HeyMetra needs to set the connection up and nothing more. It cannot be switched off on its own — removing the connection is how you withdraw it. | No, read only |
-| **Direct API access** | Let your assistant use this account's own API for anything HeyMetra's other operations do not cover. It reads directly, and what comes back is the provider's own answer rather than a figure HeyMetra has checked. It can also propose changes — those are never applied until you approve them, and HeyMetra cannot undo one afterwards. | Yes — every change waits for your approval |
+| **Included with the connection** | What HeyMetra needs to set the connection up, and nothing more. It cannot be switched off on its own; to withdraw it, remove the connection. | No, read only |
+| **Full account access** | Lets your assistant read anything in this account to answer your questions. The figures are the provider's own, not ones HeyMetra has checked. It can also propose changes: none is applied until you approve it, and HeyMetra cannot undo one afterwards. | Yes — every change waits for your approval |
 
 <details>
 <summary>What each permission lets an assistant do, in full</summary>
 
-- Ask this account's own API a question HeyMetra's other operations do not cover. Reads only, and the answer is the provider's own rather than a figure HeyMetra has checked.
-- Propose a change through this account's own API, for operations HeyMetra does not cover. Nothing is sent until you approve it, and HeyMetra cannot undo it afterwards.
+- Ask anything about this account and get the answer from its live data. Reads only, and the figures are the provider's own rather than ones HeyMetra has checked.
+- Propose a change to this account. Nothing is sent until you approve it, and HeyMetra cannot undo it afterwards.
 </details>
 
 Anything that would change something comes back as a proposal you approve, inside bounds that live in code rather than in a prompt: ±50% on a budget, 5 campaigns per action and 20 changes a rolling day, and an approval that expires after 30 minutes. [How that works](https://heymetra.com/security/).
@@ -214,7 +214,7 @@ Anything that would change something comes back as a proposal you approve, insid
 
 ## What HeyMetra reads from Zoho SalesIQ
 
-SalesIQ needs its own sign-in, separate from Zoho CRM: connecting one asks for nothing from the other. Your MCP client gets one tool that reads the conversations — how many were started in a period, and how they split by status (the ones nobody picked up included), by department, by the operator who took them, by brand, or by day. A missed chat is a lead that leaves no record in the CRM at all, which is the question this connector exists for. The grant is SalesIQ's own conversations scope, so a conversation comes back as SalesIQ holds it: where SalesIQ captured a visitor's name, email or phone number, or what they typed, that is in the reply. It is what makes a chat matchable to a lead in your CRM, and it is why this connection should be treated as customer data rather than as a counter. Zoho can separate reading from writing, so you choose which at connect time; a read-only connection holds no permission to send a chat message to anybody.
+SalesIQ needs its own sign-in, separate from Zoho CRM: connecting one asks for nothing from the other. Then ask your assistant about your conversations: how many were started in a period, and how they split by status (the ones nobody picked up included), by department, by the operator who took them, by brand, or by day. A missed chat is a lead that leaves no record in the CRM at all, which is the question this connector exists for. Conversations come back as SalesIQ holds them: where SalesIQ captured a visitor's name, email or phone number, or what they typed, that is in the answer. It is what makes a chat matchable to a lead in your CRM, and it is why this connection should be treated as customer data rather than as a counter. When you connect, you choose whether your assistant may only read; a read-only connection cannot send a chat message to anybody.
 
 <details>
 <summary>About Zoho SalesIQ</summary>
