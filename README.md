@@ -230,7 +230,7 @@ The reason to read Zoho SalesIQ through HeyMetra rather than through a server th
 
 **Analytics** — [Google Analytics 4](https://heymetra.com/connectors/google-analytics-4/) · [Google Search Console](https://github.com/zeisoft/google-search-console-mcp) · [PostHog](https://github.com/zeisoft/posthog-mcp)
 
-**Ecommerce** — [Shopify](https://heymetra.com/connectors/shopify/) · [Trendyol](https://github.com/zeisoft/trendyol-mcp) · [Hepsiburada](https://heymetra.com/connectors/hepsiburada/) · [n11](https://github.com/zeisoft/n11-mcp) · [Çiçeksepeti](https://heymetra.com/connectors/ciceksepeti/) · [Amazon Seller Central](https://github.com/zeisoft/amazon-seller-central-mcp) · [ikas](https://heymetra.com/connectors/ikas/) · [WooCommerce](https://github.com/zeisoft/woocommerce-mcp)
+**Ecommerce** — [Shopify](https://heymetra.com/connectors/shopify/) · [Trendyol](https://github.com/zeisoft/trendyol-mcp) · [Hepsiburada](https://heymetra.com/connectors/hepsiburada/) · [n11](https://github.com/zeisoft/n11-mcp) · [Çiçeksepeti](https://github.com/zeisoft/ciceksepeti-mcp) · [Amazon Seller Central](https://github.com/zeisoft/amazon-seller-central-mcp) · [ikas](https://heymetra.com/connectors/ikas/) · [WooCommerce](https://github.com/zeisoft/woocommerce-mcp)
 
 **Revenue & CRM** — [Stripe](https://github.com/zeisoft/stripe-mcp) · [HubSpot](https://heymetra.com/connectors/hubspot/) · [Zoho CRM](https://github.com/zeisoft/zoho-crm-mcp) · **Zoho SalesIQ** · [Zoho Marketing Automation](https://github.com/zeisoft/zoho-marketing-automation-mcp)
 
