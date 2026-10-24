@@ -106,11 +106,11 @@ Full walkthrough: [heymetra.com/mcp/grok/](https://heymetra.com/mcp/grok/)
 </details>
 
 <details>
-<summary><b>Perplexity</b> — Settings → Connectors → Custom connector → Remote</summary>
+<summary><b>Perplexity</b> — Plugins → Add custom → Connector → Add MCP connector → Remote</summary>
 
-Paste the address above into Settings → Connectors → Custom connector → Remote.
+Paste the address above into Plugins → Add custom → Connector → Add MCP connector → Remote.
 
-_Perplexity documents it as a Pro, Max and Enterprise feature._
+_In an organization, an admin has to allow members to add custom connectors first._
 
 Full walkthrough: [heymetra.com/mcp/perplexity/](https://heymetra.com/mcp/perplexity/)
 </details>
