@@ -226,7 +226,7 @@ Zoho SalesIQ is the live chat and visitor tracking on your website. It is where 
 
 The reason to read Zoho SalesIQ through HeyMetra rather than through a server that only knows Zoho SalesIQ is everything else it can answer in the same breath:
 
-**Ads** — [Google Ads](https://heymetra.com/connectors/google-ads/) · [Meta](https://heymetra.com/connectors/meta-ads/)
+**Ads** — [Google Ads](https://github.com/zeisoft/google-ads-mcp) · [Meta](https://heymetra.com/connectors/meta-ads/)
 
 **Analytics** — [Google Analytics 4](https://github.com/zeisoft/google-analytics-4-mcp) · [Google Search Console](https://github.com/zeisoft/google-search-console-mcp) · [PostHog](https://github.com/zeisoft/posthog-mcp)
 
