@@ -365,7 +365,8 @@ def render(c: dict, clients: list[dict], siblings: list[dict]) -> str:
         p.append(probs)
 
     if c.get("how"):
-        p.append(f"## What HeyMetra reads from {name}")
+        # A channel is where answers are sent, not an account that is read.
+        p.append(f"## What HeyMetra does with {name}" if c.get("kind") == "channel" else f"## What HeyMetra reads from {name}")
         p.append("")
         p.append(c["how"].strip())
         p.append("")
@@ -381,8 +382,13 @@ def render(c: dict, clients: list[dict], siblings: list[dict]) -> str:
     p.append("## One connection, not seven")
     p.append("")
     p.append(
-        "The reason to read {n} through HeyMetra rather than through a server that only knows "
-        "{n} is everything else it can answer in the same breath:".format(n=name)
+        (
+            "The reason to send to {n} through HeyMetra rather than through a server that only "
+            "knows {n} is everything the answer can draw on before it is sent:"
+            if c.get("kind") == "channel"
+            else "The reason to read {n} through HeyMetra rather than through a server that only "
+            "knows {n} is everything else it can answer in the same breath:"
+        ).format(n=name)
     )
     p.append("")
     by_cat: dict[str, list[str]] = {}
