@@ -142,10 +142,12 @@ def permissions_table(c: dict) -> str:
     for p in perms:
         ops = p.get("operations") or []
         writes = any(o.get("writes") for o in ops)
-        limits = p.get("limits") or []
-        desc = p.get("description", "").rstrip(".")
+        # Each limit is already a sentence (or several). Only the closing full stop
+        # is dropped, so joining them and ending the cell cannot print ".;" or "..".
+        limits = [str(x).strip().rstrip(".") for x in p.get("limits") or []]
+        desc = p.get("description", "").strip().rstrip(".")
         if limits:
-            desc += " — " + "; ".join(str(x) for x in limits)
+            desc += " — " + "; ".join(x for x in limits if x)
         rows.append(
             f"| **{p.get('label', p.get('key'))}** | {desc}. | "
             f"{'Yes — every change waits for your approval' if writes else 'No, read only'} |"
@@ -256,6 +258,13 @@ def hook(c: dict) -> str:
     return template.format(name=c["name"])
 
 
+def badge_text(text: str) -> str:
+    """shields.io reads a single dash as the separator between label, message and
+    colour, so a slug with a dash in it drew "404: badge not found". A literal dash
+    is written twice, a literal underscore twice, and a space as an underscore."""
+    return text.replace("-", "--").replace("_", "__").replace(" ", "_")
+
+
 def render(c: dict, clients: list[dict], siblings: list[dict]) -> str:
     name = c["name"]
     slug = c["slug"]
@@ -276,7 +285,7 @@ def render(c: dict, clients: list[dict], siblings: list[dict]) -> str:
         f"[![MCP Registry](https://img.shields.io/badge/MCP_Registry-com.heymetra%2Fheymetra-1f6feb)]({REGISTRY})\n"
         f"[![Transport](https://img.shields.io/badge/transport-Streamable_HTTP-444)](https://modelcontextprotocol.io/)\n"
         f"[![Auth](https://img.shields.io/badge/auth-OAuth_2.1-444)]({SITE}/security/)\n"
-        f"[![Connector page](https://img.shields.io/badge/heymetra.com-{slug}-1f6feb)]({SITE}/connectors/{slug}/)"
+        f"[![Connector page](https://img.shields.io/badge/heymetra.com-{badge_text(slug)}-1f6feb)]({SITE}/connectors/{slug}/)"
     )
     p.append("")
     p.append("```")
@@ -303,6 +312,8 @@ def render(c: dict, clients: list[dict], siblings: list[dict]) -> str:
     p.append(f"## Connect {name}")
     p.append("")
     p.append(setup_section(c))
+    p.append("")
+    p.append(f"The same steps are on the docs page: [{name} setup guide]({SITE}/docs/{slug}/).")
     p.append("")
 
     p.append("## Then add HeyMetra to your assistant")
@@ -371,12 +382,15 @@ def render(c: dict, clients: list[dict], siblings: list[dict]) -> str:
     p.append("")
     by_cat: dict[str, list[str]] = {}
     for s in siblings:
+        # Only what can be connected today. A connector the catalogue lists as
+        # `soon` cannot answer anything "in the same breath", so it is left out
+        # until the day it turns `available`.
+        if not published(s):
+            continue
         if s["slug"] == slug:
             link = f"**{s['name']}**"
-        elif published(s):
-            link = f"[{s['name']}](https://github.com/zeisoft/{repo_name(s['slug'])})"
         else:
-            link = f"[{s['name']}]({SITE}/connectors/{s['slug']}/)"
+            link = f"[{s['name']}](https://github.com/zeisoft/{repo_name(s['slug'])})"
         by_cat.setdefault(s["category"], []).append(link)
     for cat, items in by_cat.items():
         p.append(f"**{cat}** — " + " · ".join(items))
@@ -387,6 +401,7 @@ def render(c: dict, clients: list[dict], siblings: list[dict]) -> str:
     p.append("## Links")
     p.append("")
     p.append(f"- [{name} connector page]({SITE}/connectors/{slug}/)")
+    p.append(f"- [{name} setup guide]({SITE}/docs/{slug}/)")
     p.append(f"- [HeyMetra]({SITE}/) — what the product is")
     p.append(f"- [Setup for every assistant]({SITE}/mcp/)")
     p.append(f"- [Security and limits]({SITE}/security/)")
