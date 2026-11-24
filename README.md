@@ -192,7 +192,7 @@ Permissions are switched on per connection, and one you leave off is a tool your
 - Propose a change to this account. Nothing is sent until you approve it, and HeyMetra cannot undo it afterwards.
 </details>
 
-Anything that would change something comes back as a proposal you approve, inside bounds that live in code rather than in a prompt: ±50% on a budget, 5 campaigns per action and 20 changes a rolling day, and an approval that expires after 30 minutes. [How that works](https://heymetra.com/security/).
+Anything that would change something comes back as a proposal you approve. Nothing is applied before your yes, and only on an account you connected with permission to change it. [How that works](https://heymetra.com/security/).
 
 ## When something goes wrong
 

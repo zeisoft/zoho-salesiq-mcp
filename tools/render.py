@@ -341,16 +341,21 @@ def render(c: dict, clients: list[dict], siblings: list[dict]) -> str:
             for perm in (c.get("consent") or {}).get("permissions") or []
             for o in perm.get("operations") or []
         ):
-            bound = (
-                "at most 20 messages a rolling day, counted separately from account changes"
-                if c.get("kind") == "channel"
-                else "±50% on a budget, 5 campaigns per action and 20 changes a rolling day"
-            )
-            p.append(
-                "Anything that would change something comes back as a proposal you approve, "
-                f"inside bounds that live in code rather than in a prompt: {bound}, and an "
-                f"approval that expires after 30 minutes. [How that works]({SITE}/security/)."
-            )
+            # Only what the backend enforces today (core/limits.py): the budget, campaign
+            # and daily-change ceilings were removed on 2026-09-24 and approvals no longer
+            # expire; a channel still sends at most 20 messages a rolling day.
+            if c.get("kind") == "channel":
+                p.append(
+                    "Every message is shown to you and sent only after you say yes, at most 20 "
+                    "a rolling day, counted separately from account changes. "
+                    f"[How that works]({SITE}/security/)."
+                )
+            else:
+                p.append(
+                    "Anything that would change something comes back as a proposal you approve. "
+                    "Nothing is applied before your yes, and only on an account you connected "
+                    f"with permission to change it. [How that works]({SITE}/security/)."
+                )
             p.append("")
 
     probs = problems_section(c)
