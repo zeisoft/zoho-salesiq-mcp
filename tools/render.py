@@ -346,8 +346,8 @@ def render(c: dict, clients: list[dict], siblings: list[dict]) -> str:
             # expire; a channel still sends at most 20 messages a rolling day.
             if c.get("kind") == "channel":
                 p.append(
-                    "Every message is shown to you and sent only after you say yes, at most 20 "
-                    "a rolling day, counted separately from account changes. "
+                    "It sends at most 20 messages a rolling day, counted separately from account "
+                    "changes. Turn on Ask before sending and every message waits for your yes first. "
                     f"[How that works]({SITE}/security/)."
                 )
             else:
